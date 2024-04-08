@@ -5,43 +5,32 @@
 #define CHAR_LIMIT 100
 #define ALPHABET_SIZE 26
 
-int main()
+// Function to convert all characters in plaintext message to lowercase
+void makeLowercase(char *plaintextMessage)
 {
-    char message[CHAR_LIMIT]; 
-    int letterFrequency[ALPHABET_SIZE] = {0};
-
-    // Get user input for message
-    printf("Enter a message (up to 100 characters): ");
-    fgets(message, sizeof(message), stdin);
-
-    // Convert all characters to lowercase
-    for (int i = 0; message[i] != '\0'; i++)
+    for (int i = 0; plaintextMessage[i] != '\0'; i++)
     {
-        message[i] = tolower(message[i]);
+        plaintextMessage[i] = tolower(plaintextMessage[i]);
     }
+}
 
-    // Print original message
-    printf("\nMessage: %s\n", message);
-
-    // Copy message to caesar for encryption
-    char caesar[CHAR_LIMIT] = {0};
-    strcpy(caesar, message);
-
-    // Encrypt message using caesar cipher
-    for (int i = 0; i < sizeof(message); i++)
+// Function to encrypt message using Caesar Cipher
+void encrypt(char * plaintextMessage, char *ciphertextMessage)
+{
+    for (int i = 0; i < sizeof(plaintextMessage); i++)
     {
-        if (isalpha(caesar[i]))
+        if (isalpha(ciphertextMessage[i]))
         {
-            int index = caesar[i] - 'a';    // Convert character to index 0-25
-            index = (index + 3) % 26;       // Shift each character ahead 3 characters
-            caesar[i] = 'a' + index;        // Convert index back to character
+            int index = ciphertextMessage[i] - 'a';
+            index = (index + 3) % 26;
+            ciphertextMessage[i] = 'a' + index;
         }
     }
+}
 
-    // Print encrypted message
-    printf("Caesar: %s\n", caesar);
-
-    // Count frequency of each letter for message
+// Function to count the frequency of each letter in message
+void countLetterFrequency(char *message, int *letterFrequency)
+{
     for (int i = 0; message[i] != '\0'; i++)
     {
         if (isalpha(message[i]))
@@ -50,32 +39,59 @@ int main()
             letterFrequency[index]++;
         }
     }
+}
 
-    // Display the results
-    printf("\nLetter Frequency in Message:\n");
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
+// Function to print frequency results
+void printLetterFrequencyResults(int *letterFrequency)
+{
+    //Count Frequency
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
         printf("%c: %d\n", 'a' + i, letterFrequency[i]);
     }
-
-    // Reset letterFrequency to 0
+    // Reset Frequency to 0
     for (int i = 0; i < ALPHABET_SIZE; i++) 
     {
     letterFrequency[i] = 0;
     }
+}
 
-    // Count frequency of each letter for caesar
-    for (int i = 0; caesar[i] != '\0'; i++) {
-        if (isalpha(caesar[i])) {
-            int index = caesar[i] - 'a';   // Convert character to index 0-25
-            letterFrequency[index]++;
-        }
-    }
+int main()
+{
+    char plaintextMessage[CHAR_LIMIT]; 
+    int letterFrequency[ALPHABET_SIZE] = {0};
 
-    // Display the results
-    printf("\nLetter Frequency in Caesar:\n");
-    for (int i = 0; i < ALPHABET_SIZE; i++) {
-        printf("%c: %d\n", 'a' + i, letterFrequency[i]);
-    }
+    // Get user input for message
+    printf("Enter a message (up to 100 characters): ");
+    fgets(plaintextMessage, sizeof(plaintextMessage), stdin);
+
+    // Convert all characters to lowercase
+    makeLowercase(plaintextMessage);
+
+    // Print original message
+    printf("\nBefore encryption: %s\n", plaintextMessage);
+
+    // Copy plaintext to ciphertext variable for encryption
+    char ciphertextMessage[CHAR_LIMIT] = {0};
+    strcpy(ciphertextMessage, plaintextMessage);
+
+    // Encrypt message using caesar cipher
+    encrypt(plaintextMessage, ciphertextMessage);
+
+    // Print encrypted message
+    printf("After encryption: %s\n", ciphertextMessage);
+
+    // Count frequency of each letter for plaintext message
+    countLetterFrequency(plaintextMessage, letterFrequency);
+
+    // Display the results for plaintext message
+    printLetterFrequencyResults(letterFrequency);
+
+    // Count frequency of each letter for ciphertext message
+    countLetterFrequency(ciphertextMessage, letterFrequency);
+
+    // Display the results for ciphertext message
+    printLetterFrequencyResults(letterFrequency);
 
     return 0;
 }
