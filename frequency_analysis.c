@@ -52,7 +52,7 @@ void printLetterFrequencyResults(int *letterFrequency)
     // Reset Frequency to 0
     for (int i = 0; i < ALPHABET_SIZE; i++) 
     {
-    letterFrequency[i] = 0;
+        letterFrequency[i] = 0;
     }
 }
 
